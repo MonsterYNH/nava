@@ -1,6 +1,7 @@
 package datasource
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/MonsterYNH/nava/datasource/prometheus"
@@ -39,7 +40,11 @@ type DataSourceEntry struct {
 
 func (datasource *DataSourceEntry) PostgresDB() (*pg.DB, error) {
 	if !datasource.config.DataSource.Postgres.Enable {
-		return nil, fmt.Errorf("datasource postgres is not enable")
+		return nil, errors.New("datasource postgres is not enable")
+	}
+
+	if datasource.postgresDB == nil {
+		return nil, errors.New("datasource postgres is not init")
 	}
 
 	return datasource.postgresDB, nil
@@ -47,7 +52,11 @@ func (datasource *DataSourceEntry) PostgresDB() (*pg.DB, error) {
 
 func (datasource *DataSourceEntry) PrometheusClient() (*prometheus.Client, error) {
 	if !datasource.config.DataSource.Promethes.Enable {
-		return nil, fmt.Errorf("datasource prometheus api is not enable")
+		return nil, errors.New("datasource prometheus api is not enable")
+	}
+
+	if datasource.prometheusClient == nil {
+		return nil, errors.New("datasource prometheus is not init")
 	}
 
 	return datasource.prometheusClient, nil
