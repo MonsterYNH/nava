@@ -11,6 +11,8 @@ import (
 	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 type Engine struct {
@@ -43,7 +45,7 @@ func New(config *setting.Config) (*Engine, error) {
 		DataSource: dataSource,
 		Logger:     *logger,
 		gin:        engine,
-		apiGroup:   engine.Group("/api", AuthMiddleware(*config)),
+		apiGroup:   engine.Group("/api", AuthMiddleware(*config), RecoverMiddleware(*config, logger)),
 		services:   make(map[string]Service),
 	}, nil
 }
@@ -98,7 +100,9 @@ func initGin(config *setting.Config, logger *logrus.Logger) (*gin.Engine, error)
 		})
 	}
 
-	app.Use(RecoverMiddleware(*config, logger))
+	if config.Server.EnableSwagger {
+		app.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 
 	return app, nil
 }

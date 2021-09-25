@@ -11,6 +11,9 @@ func (e ErrCode) Error() string {
 }
 
 func (e *ErrCode) SetErrors(errs ...string) ErrCode {
+	if len(e.Errs) == 0 {
+		e.Errs = []string{}
+	}
 	return ErrCode{
 		Code:    e.Code,
 		Message: e.Message,

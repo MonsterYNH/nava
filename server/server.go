@@ -41,3 +41,7 @@ func Run() error {
 func RegisterAPIV1Service(service engine.Service) error {
 	return app.RegisterAPIService(fmt.Sprintf("/v1/%s", service.Name()), service)
 }
+
+func RegisterService(prefix string, service engine.Service) error {
+	return app.RegisterService(fmt.Sprintf("/%s", prefix), service)
+}
