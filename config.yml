@@ -1,0 +1,17 @@
+server:
+  host: 0.0.0.0
+  port: 8000
+  enable_swagger: true
+  enable_auth: false
+  enable_health: true
+  enable_pprof: true
+data_source:
+  postgres:
+  prometheus:
+    url: 172.11.0.3:9090
+logger:
+  logger_name: logrus
+  log_filename: ./logs/vcore.log
+  log_level: debug
+  log_max_age: 2
+  log_rotation_time: 3
